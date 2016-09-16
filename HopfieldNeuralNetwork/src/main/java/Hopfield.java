@@ -11,7 +11,7 @@ public class Hopfield {
     private int[] pattern;
     private int[] normalizedPattern;
     private Node[] patternNodes;
-    private HashMap<Pair<Node, Node>, Integer> weights;
+    private Hashtable<Pair<Node, Node>, Integer> weights;
 
     public Hopfield(int[] pattern) {
         this.numberOfNodes = pattern.length;
@@ -19,7 +19,7 @@ public class Hopfield {
 
         this.normalizedPattern = new int[numberOfNodes];
         this.patternNodes = new Node[numberOfNodes];
-        this.weights = new HashMap<Pair<Node, Node>, Integer>();
+        this.weights = new Hashtable<Pair<Node, Node>, Integer>();
 
         this.normalize(this.pattern);
         this.makeNodes(this.normalizedPattern);
@@ -30,26 +30,40 @@ public class Hopfield {
 
         for (int i = 0; i < this.patternNodes.length; i++) {
             for (int j = 0; j < this.patternNodes.length; j++) {
-                if (i == j) {
-                    this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), 0);
-                } else {
-                    int randValue = random.nextInt(10 + 1);
-                    this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), randValue);
-                }
+                if (i == j)
+                    continue;
+                this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), 1);
             }
         }
     }
 
     public void train() {
-        // TODO
+        for (int i = 0; i < this.patternNodes.length; i++) {
+            for (int j = 0; j < this.patternNodes.length; j++) {
+                if (i == j)
+                    continue;
+
+                Node from = this.patternNodes[i];
+                Node to = this.patternNodes[j];
+                int newWeight = ((2 * from.getValue()) - 1) * ((2 * to.getValue()) - 1);
+                this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), newWeight);
+            }
+        }
     }
 
     public void train(int[] patternData) {
-        // TODO
-    }
+        this.normalize(patternData);
+        this.makeNodes(this.normalizedPattern);
 
-    public void addPattern(int[] patternData) {
-        // TODO
+        for (int i = 0; i < this.patternNodes.length; i++) {
+            for (int j = 0; j < this.patternNodes.length; j++) {
+                if (i == j)
+                    continue;
+
+                int newWeight = (2 * this.patternNodes[i].getValue() - 1) * (2 * this.patternNodes[j].getValue() - 1);
+                this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), newWeight);
+            }
+        }
     }
 
     private void makeNodes(int[] data) {
@@ -60,11 +74,55 @@ public class Hopfield {
     }
 
     private void normalize(int[] data) {
-        Arrays.sort(data);
-        int maxValue = data[data.length - 1];
+        int maxValue = -1;
+
+        for (int i = 0; i < data.length; i++) {
+            if (maxValue < data[i])
+                maxValue = data[i];
+        }
 
         for (int i = 0; i < data.length; i++) {
             this.normalizedPattern[i] = (int)data[i] / (int)maxValue;
         }
+    }
+
+    public int getNumberOfNodes() {
+        return numberOfNodes;
+    }
+
+    public void setNumberOfNodes(int numberOfNodes) {
+        this.numberOfNodes = numberOfNodes;
+    }
+
+    public Hashtable<Pair<Node, Node>, Integer> getWeights() {
+        return weights;
+    }
+
+    public void setWeights(Hashtable<Pair<Node, Node>, Integer> weights) {
+        this.weights = weights;
+    }
+
+    public int[] getNormalizedPattern() {
+        return normalizedPattern;
+    }
+
+    public void setNormalizedPattern(int[] normalizedPattern) {
+        this.normalizedPattern = normalizedPattern;
+    }
+
+    public Node[] getPatternNodes() {
+        return patternNodes;
+    }
+
+    public void setPatternNodes(Node[] patternNodes) {
+        this.patternNodes = patternNodes;
+    }
+
+    public int[] getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(int[] pattern) {
+        this.pattern = pattern;
     }
 }
