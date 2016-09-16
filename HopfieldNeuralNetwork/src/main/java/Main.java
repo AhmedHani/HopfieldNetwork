@@ -20,5 +20,10 @@ public class Main {
         for (Pair<Node, Node> edge : weights.keySet()) {
             System.out.println(edge.getKey().getId() + "->" + edge.getValue().getId() + " Value: " + weights.get(edge));
         }
+
+        Visualize visualize = new Visualize(weights);
+        visualize.setGraphName("VER1");
+        visualize.build();
+        visualize.draw();
     }
 }
