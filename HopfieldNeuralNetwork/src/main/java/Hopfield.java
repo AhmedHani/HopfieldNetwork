@@ -8,49 +8,54 @@ import java.util.*;
  */
 public class Hopfield {
     private int numberOfNodes;
-    private int[] input;
-    private int[] normalizedInput;
-    private Node[] inputNodes;
+    private int[] pattern;
+    private int[] normalizedPattern;
+    private Node[] patternNodes;
     private HashMap<Pair<Node, Node>, Integer> weights;
 
-    public Hopfield(int numberOfNodes, int[] input) {
-        assert numberOfNodes == this.input.length;
+    public Hopfield(int[] pattern) {
+        this.numberOfNodes = pattern.length;
+        this.pattern = pattern;
 
-        this.numberOfNodes = numberOfNodes;
-        this.input = input;
-
-        this.normalizedInput = new int[numberOfNodes];
-        this.inputNodes = new Node[numberOfNodes];
+        this.normalizedPattern = new int[numberOfNodes];
+        this.patternNodes = new Node[numberOfNodes];
         this.weights = new HashMap<Pair<Node, Node>, Integer>();
 
-        this.normalize(this.input);
-        this.makeNodes(this.normalizedInput);
+        this.normalize(this.pattern);
+        this.makeNodes(this.normalizedPattern);
     }
 
     public void makeNetwork() {
         Random random = new Random();
 
-        for (int i = 0; i < this.inputNodes.length; i++) {
-            for (int j = 0; j < this.inputNodes.length; j++) {
+        for (int i = 0; i < this.patternNodes.length; i++) {
+            for (int j = 0; j < this.patternNodes.length; j++) {
                 if (i == j) {
-                    this.weights.put(new Pair<Node, Node>(this.inputNodes[i], this.inputNodes[j]), 0);
+                    this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), 0);
                 } else {
                     int randValue = random.nextInt(10 + 1);
-                    this.weights.put(new Pair<Node, Node>(this.inputNodes[i], this.inputNodes[j]), randValue);
+                    this.weights.put(new Pair<Node, Node>(this.patternNodes[i], this.patternNodes[j]), randValue);
                 }
             }
         }
     }
 
+    public void train() {
+        // TODO
+    }
+
+    public void train(int[] patternData) {
+        // TODO
+    }
+
     public void addPattern(int[] patternData) {
         // TODO
-
     }
 
     private void makeNodes(int[] data) {
         for (int i = 0; i < data.length; i++) {
             Node node = new Node(i + 1, data[i]);
-            this.inputNodes[i] = node;
+            this.patternNodes[i] = node;
         }
     }
 
@@ -59,7 +64,7 @@ public class Hopfield {
         int maxValue = data[data.length - 1];
 
         for (int i = 0; i < data.length; i++) {
-            this.normalizedInput[i] = (int)data[i] / (int)maxValue;
+            this.normalizedPattern[i] = (int)data[i] / (int)maxValue;
         }
     }
 }
