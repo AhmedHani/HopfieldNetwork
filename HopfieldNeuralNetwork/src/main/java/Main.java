@@ -22,6 +22,7 @@ public class Main {
         }
 
         int[] newPattern = {1, 0, 1, 0, 1};
+        Node[] patternNodes = hopfield.getPatternNodes();
         hopfield.train(newPattern);
 
         weights = hopfield.getWeights();
@@ -32,8 +33,8 @@ public class Main {
             System.out.println(edge.getKey() + "->" + edge.getValue() + " Value: " + weights.get(edge));
         }
 
-        Visualize visualize = new Visualize(weights);
-        visualize.setGraphName("VER1");
+        Visualize visualize = new Visualize(patternNodes, weights, "TEST");
+        //visualize.setGraphName("VER1");
         visualize.build();
         visualize.draw();
     }
