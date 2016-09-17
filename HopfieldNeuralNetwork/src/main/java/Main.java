@@ -32,9 +32,9 @@ public class Main {
             System.out.println(edge.getKey() + "->" + edge.getValue() + " Value: " + weights.get(edge));
         }
 
-        //Visualize visualize = new Visualize(weights);
-        //visualize.setGraphName("VER1");
-        //visualize.build();
-        //visualize.draw();
+        Visualize visualize = new Visualize(weights);
+        visualize.setGraphName("VER1");
+        visualize.build();
+        visualize.draw();
     }
 }

@@ -13,9 +13,9 @@ import java.util.Hashtable;
 public class Visualize {
     private String graphName;
     private Graph graph;
-    private Hashtable<Pair<Node, Node>, Integer> network;
+    private Hashtable<Pair<Integer, Integer>, Integer> network;
 
-    public Visualize(Hashtable<Pair<Node, Node>, Integer> network) {
+    public Visualize(Hashtable<Pair<Integer, Integer>, Integer> network) {
         this.network = network;
         this.graph = null;
     }
@@ -26,23 +26,22 @@ public class Visualize {
     }
 
     public void build() {
-        HashSet<Node> visited = new HashSet<Node>();
+        HashSet<Integer> visitedNodes = new HashSet<Integer>();
 
-        for (Pair<Node, Node> edge : this.network.keySet()) {
-            if (visited.contains(edge.getKey()))
+        for (Pair<Integer, Integer> edge : this.network.keySet()) {
+            if (visitedNodes.contains(edge.getKey()))
                 continue;
-            visited.add(edge.getKey());
-            this.graph.addNode(Integer.toString(edge.getKey().getId()));
+            visitedNodes.add(edge.getKey());
+            this.graph.addNode(Integer.toString(edge.getKey()));
         }
 
-        visited = new HashSet<Node>();
-        for (Pair<Node, Node> edge : this.network.keySet()) {
-            if (visited.contains(edge.getKey()) && visited.contains(edge.getValue()))
+        HashSet<Pair<Integer, Integer>> visitedEdges = new HashSet<Pair<Integer, Integer>>();
+        for (Pair<Integer, Integer> edge : this.network.keySet()) {
+            if (visitedEdges.contains(edge) || visitedEdges.contains(new Pair<Integer, Integer>(edge.getValue(), edge.getKey())))
                 continue;
-            visited.add(edge.getKey());
-            visited.add(edge.getValue());
-            String edgeName = Integer.toString(edge.getKey().getId()) + "-" + Integer.toString(edge.getValue().getId());
-            this.graph.addEdge(edgeName, Integer.toString(edge.getKey().getId()), Integer.toString(edge.getValue().getId()));
+            visitedEdges.add(edge);
+            String edgeName = Integer.toString(edge.getKey()) + "-" + Integer.toString(edge.getValue());
+            this.graph.addEdge(edgeName, Integer.toString(edge.getKey()), Integer.toString(edge.getValue()));
         }
     }
 

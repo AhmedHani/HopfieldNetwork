@@ -12,6 +12,7 @@ public class Hopfield {
     private int[] normalizedPattern;
     private Node[] patternNodes;
     private Hashtable<Pair<Integer, Integer>, Integer> weights;
+    private Vector<int[]> recognizedPatterns;
 
     public Hopfield(int[] pattern) {
         this.numberOfNodes = pattern.length;
@@ -23,6 +24,9 @@ public class Hopfield {
 
         this.normalize(this.pattern);
         this.makeNodes(this.normalizedPattern);
+
+        this.recognizedPatterns = new Vector<int[]>();
+        this.recognizedPatterns.add(pattern);
     }
 
     public void makeNetwork() {
@@ -67,6 +71,8 @@ public class Hopfield {
                 this.weights.put(new Pair<Integer, Integer>(this.patternNodes[i].getId(), this.patternNodes[j].getId()), newWeight + prevWeight);
             }
         }
+
+        this.recognizedPatterns.add(patternData);
     }
 
     private void makeNodes(int[] data) {
@@ -127,5 +133,9 @@ public class Hopfield {
 
     public void setPattern(int[] pattern) {
         this.pattern = pattern;
+    }
+
+    public Vector<int[]> getRecognizedPatterns() {
+        return recognizedPatterns;
     }
 }
