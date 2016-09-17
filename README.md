@@ -6,6 +6,8 @@ Supported Features (cont. updated)
 - Network Visualization using [GraphStream] (http://graphstream-project.org/)
 
 An example of a hopfield network visualization with pattern of size 5
+
+
 ![alt tag](https://s15.postimg.org/5cp0ud7yj/hf_java.png)
 
 Resources
