@@ -15,15 +15,26 @@ public class Main {
         hopfield.makeNetwork();
         hopfield.train();
 
-        Hashtable<Pair<Node, Node>, Integer> weights = hopfield.getWeights();
+        Hashtable<Pair<Integer, Integer>, Integer> weights = hopfield.getWeights();
 
-        for (Pair<Node, Node> edge : weights.keySet()) {
-            System.out.println(edge.getKey().getId() + "->" + edge.getValue().getId() + " Value: " + weights.get(edge));
+        for (Pair<Integer, Integer> edge : weights.keySet()) {
+            System.out.println(edge.getKey() + "->" + edge.getValue() + " Value: " + weights.get(edge));
         }
 
-        Visualize visualize = new Visualize(weights);
-        visualize.setGraphName("VER1");
-        visualize.build();
-        visualize.draw();
+        int[] newPattern = {1, 0, 1, 0, 1};
+        hopfield.train(newPattern);
+
+        weights = hopfield.getWeights();
+
+        System.out.println("----------");
+
+        for (Pair<Integer, Integer> edge : weights.keySet()) {
+            System.out.println(edge.getKey() + "->" + edge.getValue() + " Value: " + weights.get(edge));
+        }
+
+        //Visualize visualize = new Visualize(weights);
+        //visualize.setGraphName("VER1");
+        //visualize.build();
+        //visualize.draw();
     }
 }
