@@ -13,6 +13,7 @@ public class Hopfield {
     private Node[] patternNodes;
     private Hashtable<Pair<Integer, Integer>, Integer> weights;
     private Vector<int[]> recognizedPatterns;
+    private Node[] nodesOutput;
 
     public Hopfield(int[] pattern) {
         this.numberOfNodes = pattern.length;
@@ -20,6 +21,7 @@ public class Hopfield {
 
         this.normalizedPattern = new int[numberOfNodes];
         this.patternNodes = new Node[numberOfNodes];
+        this.nodesOutput = new Node[numberOfNodes];
         this.weights = new Hashtable<Pair<Integer, Integer>, Integer>();
 
         this.normalize(this.pattern);
@@ -31,7 +33,6 @@ public class Hopfield {
 
     public void makeNetwork() {
         Random random = new Random();
-
         for (int i = 0; i < this.patternNodes.length; i++) {
             for (int j = 0; j < this.patternNodes.length; j++) {
                 if (i == j)
@@ -73,6 +74,28 @@ public class Hopfield {
         }
 
         this.recognizedPatterns.add(patternData);
+    }
+
+    public void updateNodes() {
+        for (int i = 0; i < this.patternNodes.length; i++) {
+            Node currentNode = this.patternNodes[i];
+            int nodeValue = 0;
+
+            for (Pair<Integer, Integer> edge : this.weights.keySet()) {
+                if (edge.getKey() == currentNode.getId()) {
+                    int targetNodeValue = 0;
+
+                    for (int j = 0; j < this.patternNodes.length; j++) {
+                        if (this.patternNodes[j].getId() == edge.getValue())
+                            targetNodeValue = this.patternNodes[j].getValue();
+                    }
+
+                    nodeValue += this.weights.get(edge) * targetNodeValue;
+                }
+            }
+
+            this.nodesOutput[i] = nodeValue >= 0 ? new Node(this.patternNodes[i].getId(), 1) : new Node(this.patternNodes[i].getId(), 0);
+        }
     }
 
     private void makeNodes(int[] data) {
@@ -137,5 +160,9 @@ public class Hopfield {
 
     public Vector<int[]> getRecognizedPatterns() {
         return recognizedPatterns;
+    }
+
+    public Node[] getNodesOutput() {
+        return nodesOutput;
     }
 }

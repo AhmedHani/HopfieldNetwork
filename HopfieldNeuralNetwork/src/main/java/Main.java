@@ -9,11 +9,12 @@ import java.util.Hashtable;
  */
 public class Main {
     public static void main(String[] args) {
-        int[] pattern = {0, 1, 1, 0, 1};
+        int[] pattern = {1, 1, 1, 0, 1};
 
         Hopfield hopfield = new Hopfield(pattern);
         hopfield.makeNetwork();
         hopfield.train();
+        hopfield.updateNodes();
 
         Hashtable<Pair<Integer, Integer>, Integer> weights = hopfield.getWeights();
 
@@ -21,9 +22,10 @@ public class Main {
             System.out.println(edge.getKey() + "->" + edge.getValue() + " Value: " + weights.get(edge));
         }
 
-        int[] newPattern = {1, 0, 1, 0, 1};
+       /* int[] newPattern = {1, 0, 1, 0, 1};
         Node[] patternNodes = hopfield.getPatternNodes();
         hopfield.train(newPattern);
+        hopfield.updateNodes();
 
         weights = hopfield.getWeights();
 
@@ -31,9 +33,9 @@ public class Main {
 
         for (Pair<Integer, Integer> edge : weights.keySet()) {
             System.out.println(edge.getKey() + "->" + edge.getValue() + " Value: " + weights.get(edge));
-        }
+        }*/
 
-        Visualize visualize = new Visualize(patternNodes, weights, "TEST");
+        Visualize visualize = new Visualize(hopfield.getNodesOutput(), weights, "TEST");
         //visualize.setGraphName("VER1");
         visualize.build();
         visualize.draw();
